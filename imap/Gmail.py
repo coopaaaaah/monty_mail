@@ -1,8 +1,10 @@
-class GmailConnection(Connection):
+from imap.Connection import Connection
+
+class Gmail(Connection):
 
     def __init__(self):
         Connection.__init__(self, 'imap.gmail.com')
 
     def collect_emails(self):
-        UIDs = self.connection.gmail_search(['is:unread in:inbox']) // gmail
+        UIDs = self.connection.gmail_search('is:unread in:inbox')
         self.list_subjects(UIDs)
