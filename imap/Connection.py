@@ -1,3 +1,4 @@
+from util.bcolors import bcolors
 from backports import ssl
 from bs4 import BeautifulSoup
 import imapclient
@@ -68,13 +69,3 @@ class Connection:
         if isinstance(data, dict):   return dict(map(self.convert, data.items()))
         if isinstance(data, tuple):  return map(self.convert, data)
         return data
-
-class bcolors:
-    HEADER = '\033[95m'
-    OKBLUE = '\033[94m'
-    OKGREEN = '\033[92m'
-    WARNING = '\033[93m'
-    FAIL = '\033[91m'
-    ENDC = '\033[0m'
-    BOLD = '\033[1m'
-    UNDERLINE = '\033[4m'
