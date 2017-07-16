@@ -17,16 +17,20 @@ class Connection:
         self.imap_address = imap_address;
 
     def connect(self):
+        print('')
+        print('Connecting to your email IMAP server ({0}).'.format(self.imap_address))
         try:
             self.connection = imapclient.IMAPClient(self.imap_address, ssl=True, ssl_context=self.context)
         except Exception as err:
             print(err)
 
     def disconnect(self):
+        print('')
         print('I am disconnecting you from your email.\n')
         self.connection.logout()
 
     def login(self):
+        print('')
         print('First, we must connect to your email. What is your email address?')
         try:
             email = input('Email > ')
@@ -34,16 +38,18 @@ class Connection:
             self.connection.login(email, password)
         except Exception as err:
             print(err)
-            return 0
-        return 1;
 
     def select_folder(self, folder_name):
+        print('Selecting Folder: {0}'.format(folder_name))
         self.connection.select_folder(folder_name, readonly=True)
 
     def list_subjects(self, UIDs):
 
+        print('Fetched UIDs : {0}'.format(UIDs))
         rawMessages = self.connection.fetch(UIDs, ['RFC822'])
+
         # raw messages get returned in a byte format, I need to convert them to strings to parse through them a little bit easier
+        print('Converting Raw Messages ...')
         convertedMessages = self.convert(rawMessages);
 
         print('')
