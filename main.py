@@ -1,5 +1,6 @@
 #! /usr/local/bin/python3
 
+import sys
 from pick import pick
 from imap.Gmail import Gmail
 from imap.Outlook import Outlook
@@ -11,15 +12,15 @@ def logo():
 
 def main():
 
+    arguments = sys.argv[1:]
+
     try:
-        title = 'Please choose your email client: '
-        options = ['1. GMAIL', '2. OUTLOOK']
-        choice = int(input('\n'.join(options) + '\nSelect an option: '))
+        choice = arguments[0]
 
-        if (choice != 1 and choice != 2):
-            raise Exception('Please select option 1 or 2')
+        if (choice != 'outlook' and choice != 'gmail'):
+            raise Exception('\nArgument 1 must be mail client, available mail clients: \n\t-outlook\n\t-gmail')
 
-        if (choice == 1):
+        if (choice == 'gmail'):
             connection = Gmail()
             connection.connect()
             connection.login()
@@ -27,7 +28,7 @@ def main():
             connection.collect_emails()
             connection.disconnect()
 
-        elif (choice == 2):
+        elif (choice == 'outlook'):
             connection = Outlook()
             connection.connect()
             connection.login()

@@ -1,4 +1,5 @@
 from imap.Connection import Connection
+from datetime import date, timedelta
 
 class Outlook(Connection):
 
@@ -7,5 +8,6 @@ class Outlook(Connection):
 
     def collect_emails(self):
         print('Searching your outlook folder...')
-        UIDs = self.connection.search([u'UNSEEN'])
+        print(date.today())
+        UIDs = self.connection.search(['SINCE', date.today()])
         self.list_subjects(UIDs)

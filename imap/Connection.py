@@ -32,7 +32,7 @@ class Connection:
 
     def login(self):
         print('')
-        print('First, we must connect to your email. What is your email address?')
+        print('Cool, let\'s login... ')
         try:
             email = input('Email > ')
             password = getpass.getpass('Password > ')
@@ -46,7 +46,6 @@ class Connection:
 
     def list_subjects(self, UIDs):
 
-        print('Fetched UIDs : {0}'.format(UIDs))
         rawMessages = self.connection.fetch(UIDs, ['RFC822'])
 
         # raw messages get returned in a byte format, I need to convert them to strings to parse through them a little bit easier
@@ -54,12 +53,12 @@ class Connection:
         convertedMessages = self.convert(rawMessages);
 
         print('')
-        print(bcolors.OKBLUE + 'UID\tSubject' + bcolors.ENDC)
+        print(bcolors.OKBLUE + '{:10}{:50}'.format('UID', 'Subject') + bcolors.ENDC)
 
         subjects = {}
         for uid in convertedMessages:
             parsedMessage = email.message_from_string(convertedMessages[uid]['RFC822'])
-            print('{0}\t{1}'.format(uid, parsedMessage['Subject']))
+            print('{:10}{:.50}'.format(str(uid), parsedMessage['Subject']))
             subjects[uid] = BeautifulSoup(''.join(str(v) for v in parsedMessage.get_payload()), 'html.parser')
 
         return subjects
