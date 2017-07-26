@@ -58,6 +58,8 @@ class Connection:
         subjects = {}
         for uid in convertedMessages:
             parsedMessage = email.message_from_string(convertedMessages[uid]['RFC822'])
+            if (uid == 7555):
+                print(parsedMessage)
             print('{:10}{:.50}'.format(str(uid), parsedMessage['Subject']))
             subjects[uid] = BeautifulSoup(''.join(str(v) for v in parsedMessage.get_payload()), 'html.parser')
 

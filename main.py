@@ -1,6 +1,7 @@
 #! /usr/local/bin/python3
 
 import sys
+import argparse
 from pick import pick
 from imap.Gmail import Gmail
 from imap.Outlook import Outlook
@@ -12,15 +13,12 @@ def logo():
 
 def main():
 
-    arguments = sys.argv[1:]
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-e", "--email", help="provide email client", choices=['gmail', 'outlook'], default='gmail')
+    args = parser.parse_args()
 
     try:
-        choice = arguments[0]
-
-        if (choice != 'outlook' and choice != 'gmail'):
-            raise Exception('\nArgument 1 must be mail client, available mail clients: \n\t-outlook\n\t-gmail')
-
-        if (choice == 'gmail'):
+        if (args.email == 'gmail'):
             connection = Gmail()
             connection.connect()
             connection.login()
@@ -28,7 +26,7 @@ def main():
             connection.collect_emails()
             connection.disconnect()
 
-        elif (choice == 'outlook'):
+        elif (args.email == 'outlook'):
             connection = Outlook()
             connection.connect()
             connection.login()
