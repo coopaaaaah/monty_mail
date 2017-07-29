@@ -8,6 +8,11 @@ class Outlook(Connection):
 
     def collect_emails(self):
         print('Searching your outlook folder...')
-        print(date.today())
         UIDs = self.connection.search(['SINCE', date.today()])
-        self.list_subjects(UIDs)
+        emails = self.fetch_emails_by_uid(UIDs)
+        self.list_subjects(emails)
+
+    def collect_emails_by_uid(self, uid):
+        print('Search your oulook folder for email {}'.format(uid))
+        emails = self.fetch_emails_by_uid([uid])
+        print(emails)

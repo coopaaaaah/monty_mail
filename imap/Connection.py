@@ -44,26 +44,21 @@ class Connection:
         print('Selecting Folder: {0}'.format(folder_name))
         self.connection.select_folder(folder_name, readonly=True)
 
-    def list_subjects(self, UIDs):
-
+    def fetch_emails_by_uid(self, UIDs):
         rawMessages = self.connection.fetch(UIDs, ['RFC822'])
-
         # raw messages get returned in a byte format, I need to convert them to strings to parse through them a little bit easier
         print('Converting Raw Messages ...')
-        convertedMessages = self.convert(rawMessages);
+        return self.convert(rawMessages);
 
+    def list_subjects(self, convertedMessages):
         print('')
         print(bcolors.OKBLUE + '{:10}{:50}'.format('UID', 'Subject') + bcolors.ENDC)
 
-        subjects = {}
         for uid in convertedMessages:
             parsedMessage = email.message_from_string(convertedMessages[uid]['RFC822'])
-            if (uid == 7555):
-                print(parsedMessage)
             print('{:10}{:.50}'.format(str(uid), parsedMessage['Subject']))
-            subjects[uid] = BeautifulSoup(''.join(str(v) for v in parsedMessage.get_payload()), 'html.parser')
+            # BeautifulSoup(''.join(str(v) for v in parsedMessage.get_payload()), 'html.parser')
 
-        return subjects
 
     def convert(self, data):
         if isinstance(data, bytes):  return data.decode('ascii')

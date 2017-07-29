@@ -15,6 +15,8 @@ def main():
 
     parser = argparse.ArgumentParser()
     parser.add_argument("-e", "--email", help="provide email client", choices=['gmail', 'outlook'], default='gmail')
+    parser.add_argument("-i", "--uid", help="provide email id", type=int)
+
     args = parser.parse_args()
 
     try:
@@ -23,7 +25,10 @@ def main():
             connection.connect()
             connection.login()
             connection.select_folder('INBOX')
-            connection.collect_emails()
+            if (args.uid is None):
+                connection.collect_emails()
+            else:
+                connection.collect_emails_by_uid(args.uid)
             connection.disconnect()
 
         elif (args.email == 'outlook'):
@@ -31,7 +36,10 @@ def main():
             connection.connect()
             connection.login()
             connection.select_folder('Sent Directly To Me')
-            connection.collect_emails()
+            if (args.uid is None):
+                connection.collect_emails()
+            else:
+                connection.collect_emails_by_uid(args.uid)
             connection.disconnect()
     except KeyboardInterrupt as err:
         print('')
