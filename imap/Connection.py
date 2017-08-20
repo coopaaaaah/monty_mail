@@ -19,44 +19,52 @@ class Connection:
 
     def connect(self):
         print('')
-        print('Connecting to your email IMAP server ({0}).'.format(self.imap_address))
         try:
             self.connection = imapclient.IMAPClient(self.imap_address, ssl=True, ssl_context=self.context)
         except Exception as err:
             print(err)
+        print('Connected to your email IMAP server ({0}).'.format(self.imap_address))
 
     def disconnect(self):
         print('')
-        print('I am disconnecting you from your email.\n')
+        print('Logging out.\n')
         self.connection.logout()
 
     def login(self):
         print('')
-        print('Cool, let\'s login... ')
+        print('Let\'s login... ')
         try:
             email = input('Email > ')
             password = getpass.getpass('Password > ')
             self.connection.login(email, password)
         except Exception as err:
             print(err)
+            exit(1)
+        print('You\'re connected successfully.')
 
     def select_folder(self, folder_name):
-        print('Selecting Folder: {0}'.format(folder_name))
-        self.connection.select_folder(folder_name, readonly=True)
+        print('')
+        try:
+            self.connection.select_folder(folder_name, readonly=True)
+        except Exception as err:
+            print(err)
+            exit(1)
+        print('Selected Folder: {0}'.format(folder_name))
 
     def fetch_emails_by_uid(self, UIDs):
         rawMessages = self.connection.fetch(UIDs, ['RFC822'])
         # raw messages get returned in a byte format, I need to convert them to strings to parse through them a little bit easier
+        print('')
         print('Converting Raw Messages ...')
         return self.convert(rawMessages);
 
     def list_subjects(self, convertedMessages):
-        print('')
+        print('Found {0} Messages\n'.format(len(convertedMessages)))
         print(bcolors.OKBLUE + '{:10}{:50}'.format('UID', 'Subject') + bcolors.ENDC)
 
         for uid in convertedMessages:
             parsedMessage = email.message_from_string(convertedMessages[uid]['RFC822'])
-            print('{:10}{:.50}'.format(str(uid), parsedMessage['Subject']))
+            print('{:10}{:.30s}...'.format(str(uid), parsedMessage['Subject']))
             # BeautifulSoup(''.join(str(v) for v in parsedMessage.get_payload()), 'html.parser')
 
 

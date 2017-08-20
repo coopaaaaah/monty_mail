@@ -28,7 +28,7 @@ def main():
             if (args.uid is None):
                 connection.collect_emails()
             else:
-                connection.collect_emails_by_uid(args.uid)
+                connection.collect_emails(args.uid)
             connection.disconnect()
 
         elif (args.email == 'outlook'):
