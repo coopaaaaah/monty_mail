@@ -1,8 +1,7 @@
 #! /usr/local/bin/python3
 
-import sys
-import argparse
-from pick import pick
+from util.Parser import Parser
+from util.Config import Config
 from imap.Gmail import Gmail
 from imap.Outlook import Outlook
 
@@ -13,11 +12,8 @@ def logo():
 
 def main():
 
-    parser = argparse.ArgumentParser()
-    parser.add_argument("-e", "--email", help="provide email client", choices=['gmail', 'outlook'], default='gmail')
-    parser.add_argument("-i", "--uid", help="provide email id", type=int)
-
-    args = parser.parse_args()
+    args = Parser().initilaize_arg_parser()
+    config = Config().collect_config()
 
     try:
         if (args.email == 'gmail'):
